@@ -18,6 +18,18 @@ yarn electron:serve
 yarn electron:build
 ```
 
+### Dependecies
+
+- Vue Router 4
+
+- vuetify 3
+
+```html
+https://next.vuetifyjs.com/
+```
+
+- bootstrap vue
+
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).

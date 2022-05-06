@@ -3,7 +3,8 @@
     <!-- <v-system-bar color="deep-purple darken-3"></v-system-bar> -->
 
     <v-navigation-drawer v-model="drawer" bottom temporary app>
-      <v-list-item to="/"> Home </v-list-item>
+      <v-list-item to="/">Home</v-list-item>
+      <v-list-item to="/posts">Posts</v-list-item>
       <v-list-item to="/profile">Profile</v-list-item>
       <v-list-item to="/login">Login</v-list-item>
     </v-navigation-drawer>

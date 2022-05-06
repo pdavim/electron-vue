@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../views/HomeView.vue";
+import Author from "../views/AuthorView.vue";
 
 const routes = [
   {
@@ -7,6 +8,26 @@ const routes = [
     name: "home",
     component: Home,
   },
+  {
+    path: "/posts",
+    name: "posts",
+    component: () => import("../views/PostsView.vue"),
+  },
+  {
+    path: "/post/:id",
+    name: "post",
+    component: () => import("../views/PostView.vue"),
+  },
+  {
+    path: "/authors",
+    name: "authors",
+    // route level code-splitting
+    // this generates a separate chunk (About.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("../views/AuthorsView.vue"),
+  },
+  { path: "/author/:username", name: "author", component: Author },
+
   {
     path: "/profile",
     name: "profile",
