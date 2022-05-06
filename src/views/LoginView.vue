@@ -93,6 +93,7 @@
           </div>
         </div>
       </div>
+      <div class="bottom"></div>
     </div>
   </div>
 </template>
@@ -137,7 +138,17 @@ export default {
 
 <style lang="scss">
 #login {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
 }
+
+#nav {
+  z-index: 2;
+  position: absolute;
+  width: 100%;
+}
+
 p {
   line-height: 1rem;
 }
