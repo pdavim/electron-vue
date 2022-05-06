@@ -1,76 +1,85 @@
-<template>
-  <div>
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/profile">Profile</router-link> |
-      <router-link to="/login">Login</router-link>
-    </div>
-    <div>
-      <v-sheet height="400" class="overflow-hidden" style="position: relative">
-        <v-container class="fill-height">
-          <v-row align="center" justify="center">
-            <v-btn color="pink" dark @click.stop="drawer = !drawer">
-              Toggle
-            </v-btn>
-          </v-row>
-        </v-container>
+<template class="app">
+  <v-app>
+    <!-- <v-system-bar color="deep-purple darken-3"></v-system-bar> -->
 
-        <v-navigation-drawer v-model="drawer" absolute temporary>
-          <v-list-item>
-            <v-list-item-avatar>
-              <v-img
-                src="https://randomuser.me/api/portraits/men/78.jpg"
-              ></v-img>
-            </v-list-item-avatar>
+    <v-navigation-drawer v-model="drawer" bottom temporary app>
+      <v-list-item to="/"> Home </v-list-item>
+      <v-list-item to="/profile">Profile</v-list-item>
+      <v-list-item to="/login">Login</v-list-item>
+    </v-navigation-drawer>
 
-            <v-list-item-content>
-              <v-list-item-title>John Leider</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+    <v-app-bar color="primary" prominent app>
+      <v-app-bar-nav-icon
+        variant="text"
+        @click.stop="drawer = !drawer"
+      ></v-app-bar-nav-icon>
 
-          <v-divider></v-divider>
+      <v-toolbar-title>my wp</v-toolbar-title>
 
-          <v-list dense>
-            <v-list-item v-for="item in items" :key="item.title" link>
-              <v-list-item-icon>
-                <v-icon>{{ item.icon }}</v-icon>
-              </v-list-item-icon>
+      <v-spacer></v-spacer>
 
-              <v-list-item-content>
-                <v-list-item-title>{{ item.title }}</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-navigation-drawer>
-      </v-sheet>
-    </div>
-    <router-view />
-  </div>
+      <v-btn variant="text" icon="mdi-magnify"></v-btn>
+
+      <v-btn variant="text" icon="mdi-filter"></v-btn>
+
+      <v-btn variant="text" icon="mdi-dots-vertical"></v-btn>
+    </v-app-bar>
+
+    <v-main>
+      <v-container fluid>
+        <router-view />
+      </v-container>
+    </v-main>
+    <v-container fluid>
+      <FooterComponent id="footer" />
+    </v-container>
+  </v-app>
 </template>
 
 <script>
+import FooterComponent from "./components/FooterComponent.vue";
 export default {
   name: "App",
-  components: {},
-  data() {
-    return {
-      drawer: null,
-      items: [
-        { title: "Home", icon: "mdi-view-dashboard" },
-        { title: "About", icon: "mdi-forum" },
-      ],
-    };
+  components: {
+    FooterComponent,
+  },
+
+  data: () => ({
+    drawer: false,
+    group: null,
+  }),
+
+  watch: {
+    group() {
+      this.drawer = false;
+    },
   },
 };
 </script>
+<style scoped>
+#nav {
+  z-index: 2;
+  position: absolute;
+  width: 100%;
+}
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin: 0px;
+.v-card-text {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.bg-primary {
+  background: #0d6efd !important;
+  color: rgb(var(--v-theme-on-primary)) !important;
+}
+
+.v-main {
+  margin: 0;
+  padding: 0;
+}
+
+.v-container--fluid {
+  padding: 0;
 }
 </style>

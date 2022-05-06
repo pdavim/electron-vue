@@ -136,15 +136,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #login {
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-}
-
-#nav {
-  z-index: 2;
   position: absolute;
   width: 100%;
 }
@@ -166,7 +159,7 @@ p {
 .login-page {
   align-items: center;
   display: flex;
-  height: 100vh;
+  height: 92.27vh;
 
   .wallpaper-login {
     background: url(https://images.pexels.com/photos/32237/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260)

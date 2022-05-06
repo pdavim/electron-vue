@@ -4,3 +4,5 @@
     <span> my home page </span>
   </div>
 </template>
+
+<script></script>
