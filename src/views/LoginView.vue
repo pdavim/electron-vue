@@ -18,9 +18,9 @@
               <form class="form-group">
                 <input
                   v-model="emailLogin"
-                  type="email"
+                  type="text"
                   class="form-control"
-                  placeholder="Email"
+                  placeholder="Username"
                   required
                 />
                 <input
@@ -54,9 +54,9 @@
               <form class="form-group">
                 <input
                   v-model="emailReg"
-                  type="email"
+                  type="text"
                   class="form-control"
-                  placeholder="Email"
+                  placeholder="Username"
                   required
                 />
                 <input
@@ -99,6 +99,12 @@
 </template>
 
 <script>
+import { storeToRefs } from "pinia";
+import { usePostStore } from "../stores/post.js";
+
+const { posts, loading, error } = storeToRefs(usePostStore());
+const store = usePostStore();
+
 export default {
   data() {
     return {
@@ -113,11 +119,21 @@ export default {
   },
 
   methods: {
-    doLogin() {
+    async doLogin() {
       if (this.emailLogin === "" || this.passwordLogin === "") {
         this.emptyFields = true;
       } else {
-        alert("You are now logged in");
+        await store.getJWT(this.emailLogin, this.passwordLogin);
+        console.log("token doLogin ", store.token);
+        if (store.token !== "") {
+          await store.getIndex(),
+            await store.getPageCount(),
+            await store.getTypes(),
+            await store.getTypeBySlug(),
+            console.log("your are login");
+        } else {
+          console.log("login failed");
+        }
       }
     },
 

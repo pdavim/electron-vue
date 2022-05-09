@@ -1,32 +1,21 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import { storeToRefs } from "pinia";
-import { useCommentStore } from "../stores/comment";
-import Comment from "../components/CommentComponent.vue";
 
-defineProps(["post", "author"]);
+import { usePostStore } from "../stores/post.js";
 
-const { getPostComments } = storeToRefs(useCommentStore());
-const { fetchComments } = useCommentStore();
+const { loading, error, isAuthenticated, post } = storeToRefs(usePostStore());
+let object = post._object.posts;
 
-fetchComments();
+console.log("post componet ", object);
 </script>
 
 <template>
   <div>
     <div>
-      <h2>{{ post.title }}</h2>
-      <p v-if="author">
-        Written by:
-        <RouterLink :to="`/author/${author.username}`">{{
-          author.name
-        }}</RouterLink>
-        | <span>Comments: {{ getPostComments.length }}</span>
-      </p>
-      <p>{{ post.body }}</p>
+      <h2>{{ post.title.rendered }}</h2>
+      <p v-html="post.content.rendered"></p>
     </div>
     <hr />
-    <h3>Comments:</h3>
-    <comment :comments="getPostComments"></comment>
   </div>
 </template>

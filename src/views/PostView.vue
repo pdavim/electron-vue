@@ -6,13 +6,11 @@ import { usePostStore } from "../stores/post";
 import Post from "../components/PostComponent.vue";
 
 const route = useRoute();
-const { getPostAuthor } = storeToRefs(useAuthorStore());
-const { fetchAuthors } = useAuthorStore();
 const { post, loading, error } = storeToRefs(usePostStore());
-const { fetchPost } = usePostStore();
-
-fetchAuthors();
-fetchPost(route.params.id);
+const { getPostByID } = usePostStore();
+console.log(post);
+getPostByID(route.params.id);
+console.log(post);
 </script>
 
 <template>
@@ -20,7 +18,7 @@ fetchPost(route.params.id);
     <p v-if="loading">Loading post...</p>
     <p v-if="error">{{ error.message }}</p>
     <p v-if="post">
-      <post :post="post" :author="getPostAuthor"></post>
+      <post :post="post"></post>
     </p>
   </div>
 </template>

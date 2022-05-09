@@ -19,6 +19,11 @@ const routes = [
     component: () => import("../views/PostView.vue"),
   },
   {
+    path: "/create-post",
+    name: "create-post",
+    component: () => import("../views/CreatePostView.vue"),
+  },
+  {
     path: "/authors",
     name: "authors",
     // route level code-splitting
