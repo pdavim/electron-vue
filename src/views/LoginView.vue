@@ -130,6 +130,7 @@ export default {
             await store.getPageCount(),
             await store.getTypes(),
             await store.getTypeBySlug(),
+            // await store.getCurrentUser();
             console.log("your are login");
         } else {
           console.log("login failed");
@@ -175,7 +176,7 @@ p {
 .login-page {
   align-items: center;
   display: flex;
-  height: 92.27vh;
+  height: 90.8vh;
 
   .wallpaper-login {
     background: url(https://images.pexels.com/photos/32237/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260)

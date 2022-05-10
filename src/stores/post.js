@@ -13,8 +13,13 @@ export const usePostStore = defineStore({
   state: () => ({
     posts: [],
     post: null,
+    tags: null,
+    tagsById: null,
+    categories: null,
+    categoriesId: null,
     loading: false,
     error: null,
+    user: null,
     token: "",
     totalPosts: "",
     totalPages: "",
@@ -49,6 +54,9 @@ export const usePostStore = defineStore({
             this.getIndex();
             this.getTypes();
             this.getTypeBySlug();
+            this.getTags();
+            this.getCategories();
+            //   this.getTaxonomies();
             this.isAuthenticated = true;
             this.isLoading = false;
           })
@@ -126,6 +134,111 @@ export const usePostStore = defineStore({
         });
     },
 
+    async getTags() {
+      console.log("tags");
+      await axios
+        .get("wp-json/wp/v2/tags", {
+          params: {
+            per_page: 100,
+            page: 1,
+          },
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then((res) => {
+          console.log("tags", res.data);
+          this.tags = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getTagById(tagsId) {
+      console.log("tags");
+      this.tagsById = null;
+      this.loading = true;
+      let theURL = `/wp-json/wp/v2/tags/${tagsId}`;
+      await axios
+        .get(theURL, {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.tagsById = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getCategories() {
+      console.log("categories");
+      await axios
+        .get("wp-json/wp/v2/categories", {
+          params: {
+            per_page: 100,
+            page: 1,
+          },
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then((res) => {
+          console.log("categories", res.data);
+          this.categories = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getCategoriesById(categoryId) {
+      console.log("tags");
+      this.categoriesId = null;
+      this.loading = true;
+      let theURL = `/wp-json/wp/v2/categories/${categoryId}`;
+      await axios
+        .get(theURL, {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          this.categoriesId = res.data;
+          this.loading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getTaxonomies() {
+      console.log("taxonomies");
+      await axios
+        .get("wp-json/wp/v2/taxonomies", {
+          params: {
+            per_page: 100,
+            page: 1,
+          },
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then((res) => {
+          console.log("taxonomies", res.data);
+          this.taxonomies = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
     async getPosts(numberOfPosts = 10, pageNumber = 1) {
       this.posts = [];
 
@@ -171,5 +284,23 @@ export const usePostStore = defineStore({
           console.log(err);
         });
     },
+
+    // USERS
+    /*  getCurrentUser: async function () {
+      console.log("user");
+      await axios
+        .get("/wp-json/wp/v2/users/me", {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then((res) => {
+          console.log("user", res.data);
+          this.user = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, */
   },
 });

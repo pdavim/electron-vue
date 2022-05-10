@@ -3,6 +3,7 @@
     <!-- <v-system-bar color="deep-purple darken-3"></v-system-bar> -->
 
     <v-navigation-drawer v-model="drawer" bottom temporary app>
+      <ClockSidebarComponent />
       <v-list-item to="/">Home</v-list-item>
       <v-list-item to="/posts">Posts</v-list-item>
       <v-list-item to="/create-post">Create Post</v-list-item>
@@ -40,10 +41,12 @@
 
 <script>
 import FooterComponent from "./components/FooterComponent.vue";
+import ClockSidebarComponent from "./components/ClockSidebarComponent.vue";
 export default {
   name: "App",
   components: {
     FooterComponent,
+    ClockSidebarComponent,
   },
 
   data: () => ({

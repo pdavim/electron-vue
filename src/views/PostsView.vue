@@ -5,8 +5,11 @@ import { usePostStore } from "../stores/post.js";
 
 const { posts, loading, error, isAuthenticated } = storeToRefs(usePostStore());
 const { getPosts } = usePostStore();
-
-getPosts().then(() => console.log(posts));
+console.log("posts", posts.value);
+let postsobject = posts.value;
+if (postsobject.length < 1) {
+  getPosts().then(() => console.log(posts));
+}
 </script>
 
 <template>
