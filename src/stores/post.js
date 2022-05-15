@@ -1,3 +1,7 @@
+// @ts-check
+/**
+ * @typedef {object} User
+ */
 import { defineStore } from "pinia";
 import axios from "axios";
 import { useLocalStorage, useMouse, usePreferredDark } from "@vueuse/core";
@@ -11,19 +15,27 @@ axios.defaults.baseURL = "https://pdavim.com";
 export const usePostStore = defineStore({
   id: "post",
   state: () => ({
+    /** @type Array */
     posts: [],
     post: null,
     tags: null,
     tagsById: null,
     categories: null,
     categoriesId: null,
-    loading: false,
+    /** @type boolean */
+    isLoading: false,
     error: null,
-    user: null,
+    /** @type {User[]} */
+    user: [],
+    /** @type String */
     token: "",
     totalPosts: "",
+    /** @type String */
+    role: "",
     totalPages: "",
+    /** @type boolean */
     isAuthenticated: false,
+    taxonomies: null,
   }),
   getters: {
     getPostsPerAuthor: (state) => {
@@ -32,22 +44,29 @@ export const usePostStore = defineStore({
     },
   },
   actions: {
-    async getJWT(username, password) {
+    // Auth JWT
+    async getJWT(/** @type String */ username, /** @type String */ password) {
       if (!this.isAuthenticated) {
         this.isLoading = true;
         await axios
           .post("wp-json/api/v1/token", {
+            /** @type String */
             username: username,
+            /** @type String */
             password: password,
           })
           .then((res) => {
             console.log("res", res.data.jwt_token);
             if (this.token === null) {
+              /** @type String */
               this.token = res.data.jwt_token;
+              /** @type Boolean */
               this.isAuthenticated = true;
+              sessionStorage.setItem("jwt_token", this.token);
             } else {
               this.token = "";
               this.token = res.data.jwt_token;
+              sessionStorage.setItem("jwt_token", this.token);
             }
           })
           .then((res) => {
@@ -57,6 +76,7 @@ export const usePostStore = defineStore({
             this.getTags();
             this.getCategories();
             //   this.getTaxonomies();
+            this.getCurrentUser();
             this.isAuthenticated = true;
             this.isLoading = false;
           })
@@ -66,6 +86,7 @@ export const usePostStore = defineStore({
       }
     },
 
+    // Rest API POSTS
     async getIndex() {
       await axios
         .get("/wp-json/wp/v2/", {
@@ -158,7 +179,6 @@ export const usePostStore = defineStore({
     async getTagById(tagsId) {
       console.log("tags");
       this.tagsById = null;
-      this.loading = true;
       let theURL = `/wp-json/wp/v2/tags/${tagsId}`;
       await axios
         .get(theURL, {
@@ -169,7 +189,6 @@ export const usePostStore = defineStore({
         .then((res) => {
           console.log(res.data);
           this.tagsById = res.data;
-          this.loading = false;
         })
         .catch((err) => {
           console.log(err);
@@ -200,7 +219,6 @@ export const usePostStore = defineStore({
     async getCategoriesById(categoryId) {
       console.log("tags");
       this.categoriesId = null;
-      this.loading = true;
       let theURL = `/wp-json/wp/v2/categories/${categoryId}`;
       await axios
         .get(theURL, {
@@ -211,7 +229,6 @@ export const usePostStore = defineStore({
         .then((res) => {
           console.log(res.data);
           this.categoriesId = res.data;
-          this.loading = false;
         })
         .catch((err) => {
           console.log(err);
@@ -242,7 +259,7 @@ export const usePostStore = defineStore({
     async getPosts(numberOfPosts = 10, pageNumber = 1) {
       this.posts = [];
 
-      this.loading = true;
+      this.isLoading = true;
       // console.log("token getPosts ", this.token);
       await axios
         .get("/wp-json/wp/v2/posts/", {
@@ -255,19 +272,20 @@ export const usePostStore = defineStore({
           },
         })
         .then((res) => {
+          /** @type Array */
           this.posts = res.data;
 
           console.log(this.posts);
-          this.loading = false;
+          this.isLoading = false;
         })
         .catch((err) => {
           console.log(err);
         });
     },
 
-    async getPostByID(postID) {
+    async getPostByID(/** @type number */ postID) {
       this.post = null;
-      this.loading = true;
+      this.isLoading = true;
       let theURL = `/wp-json/wp/v2/posts/${postID}`;
       await axios
         .get(theURL, {
@@ -276,31 +294,74 @@ export const usePostStore = defineStore({
           },
         })
         .then((res) => {
-          console.log(res.data);
           this.post = res.data;
-          this.loading = false;
+        })
+        .then(() => (this.isLoading = false))
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    // API USERS
+    async getCurrentUser() {
+      await axios
+        .get("/wp-json/wp/v2/users/me?context=edit", {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+        })
+        .then((res) => {
+          return this.userMapper(res.data);
+        })
+        .then((res) => {
+          this.userDispatcher(res);
+          /** @type String */
+          this.role = res.roles[0];
         })
         .catch((err) => {
           console.log(err);
         });
     },
 
-    // USERS
-    /*  getCurrentUser: async function () {
-      console.log("user");
-      await axios
-        .get("/wp-json/wp/v2/users/me", {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
-        })
-        .then((res) => {
-          console.log("user", res.data);
-          this.user = res.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }, */
+    userMapper: (/** @type object */ data) => {
+      /** @returns object */
+      return {
+        /**  @type number */
+        id: data.id,
+        /**  @type String */
+        email: data.email,
+        /**  @type String */
+        firstName: data.first_name,
+        /**  @type String */
+        lastName: data.last_name,
+        /**  @type String */
+        name: data.name,
+        /**  @type String */
+        nickname: data.nickname,
+        /**  @type String */
+        registered_date: data.registered_date,
+        /**  @type String */
+        username: data.username,
+        /**  @type String */
+        avatar_url: data.avatar_urls[96],
+        /**  @type Array */
+        capabilities: data.capabilities,
+        /**  @type String */
+        description: data.description,
+        /**  @type String */
+        locate: data.locale,
+        /**  @type Array */
+        meta: data.meta,
+        /**  @type Array */
+        roles: data.roles,
+        /**  @type String */
+        slug: data.slug,
+      };
+    },
+
+    userDispatcher: function (/** @type object */ arg) {
+      /** @type object */
+      this.user = arg;
+    },
   },
 });

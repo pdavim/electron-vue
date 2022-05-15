@@ -45,6 +45,7 @@
     "vue-axios": "^3.4.1",
     "vue-editor-js": "^2.0.2",
     "vue-router": "4",
+    "vue-virtual-scroll-grid": "^1.4.2",
     "vuetify": "npm:@vuetify/nightly@next",
     "webfontloader": "^1.0.0"
   },

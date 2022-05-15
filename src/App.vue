@@ -9,6 +9,7 @@
       <v-list-item to="/create-post">Create Post</v-list-item>
       <v-list-item to="/profile">Profile</v-list-item>
       <v-list-item to="/login">Login</v-list-item>
+      <v-list-item to="/logout">Logout</v-list-item>
     </v-navigation-drawer>
 
     <v-app-bar color="primary" prominent app>

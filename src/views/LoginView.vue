@@ -2,13 +2,13 @@
   <div id="login">
     <div class="login-page">
       <transition name="fade">
-        <div v-if="!registerActive" class="wallpaper-login"></div>
+        <div v-if="isLoading" class="wallpaper-login">Loading...</div>
       </transition>
       <div class="wallpaper-register"></div>
 
       <div class="container">
         <div class="row">
-          <div class="col-lg-4 col-md-6 col-sm-8 mx-auto">
+          <div class="ccol-12">
             <div
               v-if="!registerActive"
               class="card login"
@@ -102,7 +102,7 @@
 import { storeToRefs } from "pinia";
 import { usePostStore } from "../stores/post.js";
 
-const { posts, loading, error } = storeToRefs(usePostStore());
+const { posts, isLoading, error } = storeToRefs(usePostStore());
 const store = usePostStore();
 
 export default {

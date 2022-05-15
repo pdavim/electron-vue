@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="clock-border">
-      <div class="clock-inner" :class="color">
+      <div class="clock-inner">
         <div class="hour">{{ hours }}</div>
         <div class="dots">:</div>
         <div class="min">{{ minutes }}</div>
@@ -14,8 +14,6 @@
 </template>
 
 <script>
-import { defineComponent } from "@vue/composition-api";
-
 export default {
   data: () => ({
     hours: 0,
@@ -29,7 +27,6 @@ export default {
         this.hours = date.getHours();
         this.minutes = this.checkSingleDigit(date.getMinutes());
         this.seconds = this.checkSingleDigit(date.getSeconds());
-        console.log(this.minutes);
       }, 1000);
     },
     checkSingleDigit(digit) {
