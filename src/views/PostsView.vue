@@ -2,11 +2,12 @@
 import { RouterLink } from "vue-router";
 import { storeToRefs } from "pinia";
 import { usePostStore } from "../stores/post.js";
-
-const { posts, isLoading, error, isAuthenticated } = storeToRefs(
-  usePostStore()
-);
+import { useUserStore } from "../stores/user.js";
+const { posts, isLoading } = storeToRefs(usePostStore());
+const { isAuthenticated } = storeToRefs(useUserStore());
 const { getPosts } = usePostStore();
+
+console.log("posts is authenticated", isAuthenticated);
 console.log("posts", posts.value);
 let postsobject = posts.value;
 if (postsobject.length < 1) {
@@ -26,6 +27,12 @@ if (postsobject.length < 1) {
           class="col-4"
           style="margin: 3px; width: 31%"
         >
+          <v-img
+            :src="post.better_featured_image.source_url"
+            height="200px"
+            cover
+          ></v-img>
+
           <RouterLink :to="`/post/${post.id}`">
             <v-card-header>
               <v-card-header-text>

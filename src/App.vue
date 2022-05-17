@@ -4,6 +4,7 @@
 
     <v-navigation-drawer v-model="drawer" bottom temporary app>
       <ClockSidebarComponent />
+      <UserSidebarComponent />
       <v-list-item to="/">Home</v-list-item>
       <v-list-item to="/posts">Posts</v-list-item>
       <v-list-item to="/create-post">Create Post</v-list-item>
@@ -34,15 +35,16 @@
         <router-view />
       </v-container>
     </v-main>
-    <v-container fluid>
+    <v-footer app>
       <FooterComponent id="footer" />
-    </v-container>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
 import FooterComponent from "./components/FooterComponent.vue";
 import ClockSidebarComponent from "./components/ClockSidebarComponent.vue";
+import UserSidebarComponent from "./components/UserSidebarComponent.vue";
 export default {
   name: "App",
   components: {

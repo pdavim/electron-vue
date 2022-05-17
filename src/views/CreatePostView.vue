@@ -88,7 +88,7 @@ import { storeToRefs } from "pinia";
 
 import { usePostStore } from "../stores/post.js";
 
-const { posts, loading, error, tags, categories } = storeToRefs(usePostStore());
+const { posts, error, tags, categories } = storeToRefs(usePostStore());
 // import Editor from "../components/EditorComponent.vue";
 export default {
   data: () => ({
@@ -114,6 +114,7 @@ export default {
     editorJSConfig: {},
     htmlEditor: {},
     time: null,
+    date: null,
   }),
 
   methods: {
@@ -140,8 +141,9 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     },
-    save: async function () {
+    async save() {
       await editor.save().then((savedData) => {
+        this.getTime();
         console.log(savedData);
         this.value = savedData;
         const html = edjsParser.parse(this.value);
@@ -151,7 +153,7 @@ export default {
         console.log(this.htmlEditor);
       });
     },
-    myEditor: function () {
+    myEditor() {
       window.editor = new EditorJS({
         holder: "editorjs",
         autofocus: true,
@@ -332,7 +334,7 @@ export default {
       });
     },
 
-    listTagsId: function () {
+    listTagsId() {
       let array = tags.value;
       console.log("array", array);
       for (let i = 0; i < array.length; i++) {
@@ -340,31 +342,36 @@ export default {
       }
     },
 
-    listCategoriesId: function () {
+    listCategoriesId() {
       console.log("array list", categories);
       let array = categories.value;
       for (let i = 0; i < array.length; i++) {
         this.categories.push(array[i].id);
       }
     },
-    getTime: function () {
-      let time = moment().format();
-      console.log(time);
+    getTime() {
+      this.time = moment().format();
+      console.log(this.time);
     },
     setTime() {
       setInterval(() => {
         const date = new Date();
         this.hours = date.getHours();
-        this.minutes = this.checkSingleDigit(date.getMinutes());
-        this.seconds = this.checkSingleDigit(date.getSeconds());
+        this.minutes = date.getMinutes();
+        this.seconds = date.getSeconds();
+        this.time = {
+          hours: this.hours,
+          minutes: this.minutes,
+          seconds: this.seconds,
+        };
       }, 1000);
     },
   },
   mounted: function () {
+    this.setTime();
     this.myEditor();
     this.listCategoriesId();
     this.listTagsId();
-    this.setTime();
   },
 };
 </script>

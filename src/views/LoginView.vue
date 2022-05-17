@@ -1,94 +1,28 @@
 <template>
   <div id="login">
     <div class="login-page">
-      <transition name="fade">
-        <div v-if="isLoading" class="wallpaper-login">Loading...</div>
-      </transition>
       <div class="wallpaper-register"></div>
+      <transition v-if="isLoading" name="fade">
+        <div class="wallpaper-login">
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+                <div class="card login">Loading...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
 
-      <div class="container">
+      <div v-else class="container">
         <div class="row">
-          <div class="ccol-12">
+          <div class="col-12">
             <div
               v-if="!registerActive"
               class="card login"
               v-bind:class="{ error: emptyFields }"
             >
-              <h1>Sign In</h1>
-              <form class="form-group">
-                <input
-                  v-model="emailLogin"
-                  type="text"
-                  class="form-control"
-                  placeholder="Username"
-                  required
-                />
-                <input
-                  v-model="passwordLogin"
-                  type="password"
-                  class="form-control"
-                  placeholder="Password"
-                  required
-                />
-                <input type="submit" class="btn btn-primary" @click="doLogin" />
-                <p>
-                  Don't have an account?
-                  <a
-                    href="#"
-                    @click="
-                      (registerActive = !registerActive), (emptyFields = false)
-                    "
-                    >Sign up here</a
-                  >
-                </p>
-                <p><a href="#">Forgot your password?</a></p>
-              </form>
-            </div>
-
-            <div
-              v-else
-              class="card register"
-              v-bind:class="{ error: emptyFields }"
-            >
-              <h1>Sign Up</h1>
-              <form class="form-group">
-                <input
-                  v-model="emailReg"
-                  type="text"
-                  class="form-control"
-                  placeholder="Username"
-                  required
-                />
-                <input
-                  v-model="passwordReg"
-                  type="password"
-                  class="form-control"
-                  placeholder="Password"
-                  required
-                />
-                <input
-                  v-model="confirmReg"
-                  type="password"
-                  class="form-control"
-                  placeholder="Confirm Password"
-                  required
-                />
-                <input
-                  type="submit"
-                  class="btn btn-primary"
-                  @click="doRegister"
-                />
-                <p>
-                  Already have an account?
-                  <a
-                    href="#"
-                    @click="
-                      (registerActive = !registerActive), (emptyFields = false)
-                    "
-                    >Sign in here</a
-                  >
-                </p>
-              </form>
+              <LoginComponent />
             </div>
           </div>
         </div>
@@ -101,11 +35,13 @@
 <script>
 import { storeToRefs } from "pinia";
 import { usePostStore } from "../stores/post.js";
+import LoginComponent from "../components/LoginComponent.vue";
 
 const { posts, isLoading, error } = storeToRefs(usePostStore());
 const store = usePostStore();
 
 export default {
+  components: { LoginComponent },
   data() {
     return {
       registerActive: false,
@@ -115,6 +51,7 @@ export default {
       passwordReg: "",
       confirmReg: "",
       emptyFields: false,
+      isLoading: false,
     };
   },
 
@@ -164,7 +101,7 @@ p {
 }
 
 .card {
-  padding: 20px;
+  padding: 0;
 }
 
 .form-group {
@@ -172,19 +109,28 @@ p {
     margin-bottom: 20px;
   }
 }
+.v-main__wrap {
+  padding: 0;
+}
 
 .login-page {
   align-items: center;
   display: flex;
-  height: 90.8vh;
+  height: 94vw;
+  position: fixed;
+  width: 100vw;
 
   .wallpaper-login {
     background: url(https://images.pexels.com/photos/32237/pexels-photo.jpg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260)
       no-repeat center center;
     background-size: cover;
     height: 100%;
-    position: absolute;
+    position: fixed !important;
     width: 100%;
+  }
+
+  .login-page .wallpaper-register {
+    position: fixed !important;
   }
 
   .fade-enter-active,
@@ -203,7 +149,7 @@ p {
     height: 100%;
     position: absolute;
     width: 100%;
-    z-index: -1;
+    z-index: 0;
   }
 
   h1 {
@@ -232,5 +178,18 @@ p {
   100% {
     transform: translateX(0);
   }
+}
+
+.v-card.v-theme--light.v-card--density-default.v-card--variant-contained.elevation-12 {
+  width: 350px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: auto;
+  margin-top: 15%;
+  flex-direction: column;
 }
 </style>

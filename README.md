@@ -16,6 +16,9 @@ yarn electron:serve
 
 ```
 yarn electron:build
+
+// build for all platforms
+yarn electron:build -mwl
 ```
 
 ### Dependecies

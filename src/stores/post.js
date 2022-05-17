@@ -6,6 +6,8 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import { useLocalStorage, useMouse, usePreferredDark } from "@vueuse/core";
 
+import { useUserStore } from "../stores/user.js";
+
 const URL_STAGE = "https://jsonplaceholder.typicode.com/posts";
 const URL_DEV = "https://pdavim.com";
 
@@ -76,8 +78,12 @@ export const usePostStore = defineStore({
             this.getTags();
             this.getCategories();
             //   this.getTaxonomies();
-            this.getCurrentUser();
-            this.isAuthenticated = true;
+          })
+          .then((res) => {
+            /** @ts-check-ignore */
+            useUserStore().getCurrentUser(this.token);
+            //getCurrentUserGetter();
+            useUserStore().isAuthenticated = true;
             this.isLoading = false;
           })
           .catch((err) => {

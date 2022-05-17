@@ -1,6 +1,6 @@
 // @ts-check
 /**
- * @typedef {object} User
+ * @typedef {object} User[]
  */
 import { defineStore } from "pinia";
 import axios from "axios";
@@ -12,7 +12,7 @@ const access_token = sessionStorage.getItem("jwt_token");
 axios.defaults.baseURL = "https://pdavim.com";
 
 export const useUserStore = defineStore({
-  id: "post",
+  id: "user",
   state: () => ({
     /** @type boolean */
     isLoading: false,
@@ -20,20 +20,26 @@ export const useUserStore = defineStore({
     /** @type {User[]} */
     user: [],
     /** @type String */
-    token: "",
+    token: access_token,
     /** @type String */
     role: "",
     /** @type boolean */
     isAuthenticated: false,
   }),
-  getters: {},
+  getters: {
+    getCurrentUserGetter: (getCurrentUser) => {
+      getCurrentUser;
+      return;
+    },
+  },
   actions: {
     // API USERS
-    async getCurrentUser() {
+    /** @ts-check-ignore */
+    async getCurrentUser(token) {
       await axios
         .get("/wp-json/wp/v2/users/me?context=edit", {
           headers: {
-            Authorization: `Bearer ${this.token}`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
@@ -43,6 +49,10 @@ export const useUserStore = defineStore({
           this.userDispatcher(res);
           /** @type String */
           this.role = res.roles[0];
+          console.log("user token", this.token);
+          console.log("user isAuthenticated", this.isAuthenticated);
+          console.log("user user", this.user);
+          return;
         })
         .catch((err) => {
           console.log(err);
