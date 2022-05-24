@@ -31,9 +31,11 @@
     </v-app-bar>
 
     <v-main>
-      <v-container fluid>
-        <router-view />
-      </v-container>
+      <transition>
+        <v-container fluid>
+          <router-view />
+        </v-container>
+      </transition>
     </v-main>
     <v-footer app>
       <FooterComponent id="footer" />
