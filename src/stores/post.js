@@ -38,6 +38,8 @@ export const usePostStore = defineStore({
     /** @type boolean */
     isAuthenticated: false,
     taxonomies: null,
+    /** @type Object */
+    indexList: {},
   }),
   getters: {
     getPostsPerAuthor: (state) => {
@@ -66,8 +68,10 @@ export const usePostStore = defineStore({
               this.isAuthenticated = true;
               sessionStorage.setItem("jwt_token", this.token);
             } else {
+              /** @type String */
               this.token = "";
               this.token = res.data.jwt_token;
+              this.isAuthenticated = true;
               sessionStorage.setItem("jwt_token", this.token);
             }
           })
@@ -87,7 +91,8 @@ export const usePostStore = defineStore({
             this.isLoading = false;
           })
           .catch((err) => {
-            console.error(err);
+            this.isLoading = false;
+            console.error("error", err);
           });
       }
     },
@@ -101,6 +106,7 @@ export const usePostStore = defineStore({
           },
         })
         .then((res) => {
+          this.indexList = res.data;
           console.log("index data ", res.data);
         })
         .catch((err) => {

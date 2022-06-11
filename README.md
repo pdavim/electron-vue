@@ -50,3 +50,19 @@ https://github.com/electron/update-electron-app
 https://www.electronjs.org/docs/latest/tutorial/updates
 
 https://vercel.com/
+
+
+
+
+## added wp login
+## added wp object interaction
+## GET call developed
+
+TODO define BO
+TODO POST call 
+## added googleNews Crawler
+TODO twitter Crawler
+TODO pt news Crawler
+TODO facebook Crawler
+TODO add local storage
+TODO add cloud storage

@@ -9,8 +9,11 @@
       <v-list-item to="/posts">Posts</v-list-item>
       <v-list-item to="/create-post">Create Post</v-list-item>
       <v-list-item to="/profile">Profile</v-list-item>
+      <v-list-item to="/gears">Gear</v-list-item>
+      <v-list-item to="/studio">Studio</v-list-item>
       <v-list-item to="/login">Login</v-list-item>
       <v-list-item to="/logout">Logout</v-list-item>
+      <v-list-item to="/routes">routes</v-list-item>
     </v-navigation-drawer>
 
     <v-app-bar color="primary" prominent app>
@@ -71,6 +74,10 @@ export default {
   z-index: 2;
   position: absolute;
   width: 100%;
+}
+
+footer {
+  background: transparent !important;
 }
 
 .v-card-text {

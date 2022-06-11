@@ -2,19 +2,8 @@
   <div id="login">
     <div class="login-page">
       <div class="wallpaper-register"></div>
-      <transition v-if="isLoading" name="fade">
-        <div class="wallpaper-login">
-          <div class="container">
-            <div class="row">
-              <div class="col-12">
-                <div class="card login">Loading...</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </transition>
 
-      <div v-else class="container">
+      <div class="container">
         <div class="row">
           <div class="col-12">
             <div
@@ -22,7 +11,11 @@
               class="card login"
               v-bind:class="{ error: emptyFields }"
             >
-              <LoginComponent />
+              <LoginComponent v-if="!auth" />
+              <loading :active="loading" :is-full-page="true" />
+              <span v-if="auth" class="logged-message"
+                >You are already logged</span
+              >
             </div>
           </div>
         </div>
@@ -33,25 +26,42 @@
 </template>
 
 <script>
+// @ts-check
+
+// Import component
+import Loading from "vue3-loading-overlay";
+// Import stylesheet
+import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 import { storeToRefs } from "pinia";
 import { usePostStore } from "../stores/post.js";
 import LoginComponent from "../components/LoginComponent.vue";
+import { useUserStore } from "@/stores/user.js";
 
-const { posts, isLoading, error } = storeToRefs(usePostStore());
+const { posts, isLoading, error, isAuthenticated } = storeToRefs(
+  usePostStore()
+);
 const store = usePostStore();
 
 export default {
-  components: { LoginComponent },
+  components: { LoginComponent, Loading },
   data() {
     return {
+      /** @type boolean */
       registerActive: false,
+      /** @type string */
       emailLogin: "",
+      /** @type string */
       passwordLogin: "",
+      /** @type string */
       emailReg: "",
+      /** @type string */
       passwordReg: "",
+      /** @type string */
       confirmReg: "",
+      /** @type boolean */
       emptyFields: false,
-      isLoading: false,
+      loading: isLoading,
+      auth: isAuthenticated,
     };
   },
 
@@ -60,15 +70,19 @@ export default {
       if (this.emailLogin === "" || this.passwordLogin === "") {
         this.emptyFields = true;
       } else {
+        console.log(this.loading);
+        this.loading = true;
+        console.log(this.loading);
         await store.getJWT(this.emailLogin, this.passwordLogin);
         console.log("token doLogin ", store.token);
         if (store.token !== "") {
-          await store.getIndex(),
-            await store.getPageCount(),
-            await store.getTypes(),
-            await store.getTypeBySlug(),
-            // await store.getCurrentUser();
-            console.log("your are login");
+          await store.getIndex();
+          await store.getPageCount();
+          await store.getTypes();
+          await store.getTypeBySlug();
+          // await store.getCurrentUser();
+          console.log("your are login");
+          this.loading = false;
         } else {
           console.log("login failed");
         }
@@ -91,6 +105,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+span.logged-message {
+  padding: 65px;
+}
+
 #login {
   position: absolute;
   width: 100%;
@@ -191,5 +209,9 @@ p {
   margin-bottom: auto;
   margin-top: 15%;
   flex-direction: column;
+}
+
+.vld-background {
+  background: #0000009e;
 }
 </style>

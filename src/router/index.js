@@ -54,6 +54,34 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () => import("../views/LoginView.vue"),
   },
+  {
+    path: "/gears",
+    name: "gears",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("../views/GearsView.vue"),
+  },
+  {
+    path: "/gear/:id",
+    component: () => import("../views/GearView.vue"),
+  },
+  {
+    path: "/studio",
+    name: "studio",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("../views/StudioView.vue"),
+  },
+  {
+    path: "/routes",
+    name: "routes",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import("../views/RoutesListView.vue"),
+  },
 ];
 
 const router = createRouter({
